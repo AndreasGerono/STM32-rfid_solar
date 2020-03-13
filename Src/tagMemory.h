@@ -8,14 +8,11 @@
 #include "stdint.h"
 
 
-
-
-void tagMemory_init();
-void tagMemory_erase();
-void tag_store(uint8_t *tag);
-
-uint32_t readFromEEPROM (uint32_t address);
-void writeToEEPROM (uint32_t address, uint32_t value);
+void tag_init();
+_Bool tag_store(uint8_t *tag);
+_Bool tag_find(uint8_t *tag);
+_Bool tag_match_with_key(uint8_t *tag);
+void tag_erase_all();
 
 
 #endif

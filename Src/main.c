@@ -102,15 +102,9 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//  tag_store(tag);
-  uint32_t toWrite = 990;
-  uint32_t toRead = 0;
 
-  tagMemory_init();
-  writeToEEPROM(0, toWrite);
-  toRead = readFromEEPROM(0);
 
-  HAL_Delay(100);
+
   MFRC522_Init();
 
 
