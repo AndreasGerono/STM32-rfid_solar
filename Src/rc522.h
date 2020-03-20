@@ -128,5 +128,5 @@ void MFRC522_Reset(void);
 void MFRC522_AntennaOn(void);
 void MFRC522_AntennaOff(void);
 void MFRC522_Halt(void);
-void MFRC522_HardPowerDown(void);
-void MFRC522_HardPowerUp(void);
+void MFRC522_PowerDown(void);
+void MFRC522_PowerUp(void);

@@ -9,18 +9,18 @@
 
 
 uint32_t eeprom_read (uint32_t address){
-	address += EEPROM_START;
+	address = (address*4) + EEPROM_START;
 	return (*(__IO uint32_t *)address);
 }
 
 
 void eeprom_write(uint32_t address, uint32_t value){
-	address += EEPROM_START;
+	address = (address*4) + EEPROM_START;
 	HAL_FLASHEx_DATAEEPROM_Program (FLASH_TYPEPROGRAMDATA_WORD, address, value);
 }
 
 void eeprom_erase(uint32_t address){
-	address += EEPROM_START;
+	address = (address*4) + EEPROM_START;
 	HAL_FLASHEx_DATAEEPROM_Erase(address);
 }
 

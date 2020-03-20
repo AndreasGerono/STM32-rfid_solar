@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+ * All rights reserved.</center></h2>
+ *
+ * This software component is licensed by ST under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at:
+ *                        opensource.org/licenses/BSD-3-Clause
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -28,6 +28,10 @@
 /* USER CODE BEGIN Includes */
 #include "rc522.h"
 #include "tagMemory.h"
+#include "tasker.h"
+#include "tagMemory.h"
+#include "tagAction.h"
+#include "eeprom.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +52,8 @@
 
 /* USER CODE BEGIN PV */
 
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,12 +64,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t tag[MFRC522_MAX_LEN];
-uint8_t tag1[MFRC522_MAX_LEN];
-uint8_t tag2[MFRC522_MAX_LEN];
-uint8_t tag3[MFRC522_MAX_LEN];
-uint8_t counter = 0;
-uint8_t serNum = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -102,31 +103,38 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	MFRC522_PowerUp();
+	MFRC522_Init();
+
+
+	tag_init();
+	tag_erase_all();
+
+	tag_wait_if_no_key();
 
 
 
-  MFRC522_Init();
-
-
-  while (1)
-  {
 
 
 
-	  HAL_Delay(200);
-	  LD3_GPIO_Port->ODR ^= LD3_Pin;
-	  if(!MFRC522_Request(PICC_REQALL, tag1)){
-		  MFRC522_Anticoll(tag);
-		  HAL_Delay(1);
 
-	  }
+
+
+	Task sense_task = task_make(200, tag_auth);
+	task_start(sense_task);
+
+	while (1)
+	{
+		task_state(sense_task, NULL);
+
+
 
 
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -186,7 +194,7 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
+	/* User can add his own implementation to report the HAL error return state */
 
   /* USER CODE END Error_Handler_Debug */
 }
@@ -202,7 +210,7 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 { 
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
+	/* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }

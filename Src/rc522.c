@@ -314,12 +314,11 @@ void MFRC522_Halt(void) {
 	MFRC522_ToCard(PCD_TRANSCEIVE, buff, 4, buff, &unLen);
 }
 
-void MFRC522_HardPowerDown(void){
+void MFRC522_PowerDown(void){
 	RC522_PWR_GPIO_Port->BRR = RC522_PWR_Pin;
 }
 
-void MFRC522_HardPowerUp(void){
+void MFRC522_PowerUp(void){
 	RC522_PWR_GPIO_Port->BSRR = RC522_PWR_Pin;
-	HAL_Delay(100);
-	MFRC522_Init();
+	HAL_Delay(1);
 }
